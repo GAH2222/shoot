@@ -1,0 +1,15 @@
+{
+  "name": "shooty-server",
+  "version": "1.0.0",
+  "description": "Multiplayer server for Shooty",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "dependencies": {
+    "ws": "^8.14.2"
+  }
+}

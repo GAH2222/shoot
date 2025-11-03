@@ -1,14 +1,14 @@
-// server.js — multiplayer backend
+// server.js — multiplayer backend on Render
 const express = require('express');
 const http = require('http');
-const WebSocket = require('ws');  // assumes you use ws for WebSockets
+const WebSocket = require('ws');
 
 const app = express();
 const server = http.createServer(app);
 
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 8080;   // use Render’s PORT env variable
 
-// CORS headers
+// Allow all origins for CORS
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   next();
@@ -20,13 +20,12 @@ const wss = new WebSocket.Server({ server });
 wss.on('connection', (ws) => {
   console.log('New WebSocket connection');
 
-  ws.on('message', (data) => {
-    console.log('Received:', data);
-    // parse message and act (join lobby, start game, etc)
-    // Example: broadcast to all clients
+  ws.on('message', (message) => {
+    console.log('Received:', message);
+    // Example: broadcast message to all other clients
     wss.clients.forEach(client => {
       if (client !== ws && client.readyState === WebSocket.OPEN) {
-        client.send(data);
+        client.send(message);
       }
     });
   });
@@ -36,6 +35,6 @@ wss.on('connection', (ws) => {
   });
 });
 
-server.listen(PORT, () => {
+server.listen(PORT, '0.0.0.0', () => {
   console.log(`Server running on port ${PORT}`);
 });
